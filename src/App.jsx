@@ -1,13 +1,18 @@
 import React from "react";
-import Card from "./components/Card";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Homepage from "./screens/Homepage";
+import About from "./screens/About";
+import NoPage from "./screens/NoPage";
 
 const App = () => {
   return (
-    <div className="flex">
-      <Card />
-      <Card />
-      
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NoPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
