@@ -1,67 +1,117 @@
 import React, { useState } from "react";
 
 const App = () => {
-  // const [users, setUsers] = useState([]);
+  const [Users, setUsers] = useState([]);
+  const [userIndex, setUserIndex] = useState(null);
 
-  // const newuser = {
-  //   name: "Akshay dangi",
-  //   age: 22,
-  // };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+  });
 
-  // const AddUser = () => {
-  //   setUsers([...users, newuser]);
-  // };
+  const HandleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  // console.log(users);
-  // const deleteUser = (index) => {
-  //   const newUsers = users.filter((user, i) => {
-  //     return i !== index;
-  //   });
+  const SubmitHandler = (e) => {
+    e.preventDefault();
 
-  //   setUsers(newUsers);
-  // };
+    setUsers([...Users, formData]);
+
+    setFormData({
+      name: "",
+      email: "",
+    });
+  };
+
+  const deletehandler = (index) => {
+    const newUsers = Users.filter((user, i) => {
+      return i !== index;
+    });
+
+    setUsers(newUsers);
+  };
+
+  const getUser = (idx) => {
+    setUserIndex(idx);
+    setFormData(Users[idx]);
+  };
+
+  const UpdateHandler = (e) => {
+    e.preventDefault();
+
+    const copyUser = [...Users];
+
+    copyUser[userIndex] = formData;
+
+    setUsers(copyUser);
+
+    setUserIndex(null);
+
+    setFormData({
+      name: "",
+      email: "",
+    });
+  };
+
+  console.log(userIndex);
 
   return (
     <>
-      <h1 className="text-3xl text-center font-bold mt-10">Users</h1>
+      <h1 className="text-center font-bold text-3xl mt-10">User CRUD</h1>
 
-      {/* <button
-        onClick={AddUser}
-        className="py-1 px-3 bg-green-600 mx-auto block mt-10"
-      >
-        Add User
-      </button> */}
+      <form className="mt-10">
+        <input
+          type="text"
+          name="name"
+          placeholder=" Enter your name"
+          value={formData.name}
+          onChange={HandleInputChange}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          value={formData.email}
+          onChange={HandleInputChange}
+        />
 
-      <div className="border-2 w-fit p-10 border-black m-10">
-        <div className="h-16 w-96 bg-red-200 mx-auto flex items-center justify-between px-3">
-          <h1>
-            1. <b>Akshay</b> | 22y
-          </h1>
-          <button className="py-1 px-3 bg-green-600 text-white">Add boy</button>
-        </div>
-        <div className="h-16 w-96 bg-red-200 mt-10 mx-auto flex items-center justify-between px-3">
-          <h1>
-            2. <b>koi ladki</b> |20y
-          </h1>
-          <button className="py-1 px-3 bg-green-600 text-white">
-            Add girl
-          </button>
-        </div>
-      </div>
+        {userIndex === null ? (
+          <button onClick={SubmitHandler}>Submit</button>
+        ) : (
+          <button onClick={UpdateHandler}>Update</button>
+        )}
+      </form>
 
-      {/* {users.map((user, index) => (
-        <div className="h-16 w-96 bg-red-200 mt-10 mx-auto flex items-center justify-between px-3">
-          <h1>
-            {index + 1}. <b>{user.name}</b> | {user.age}y
-          </h1>
-          <button
-            className="py-1 px-3 bg-red-600 text-white"
-            onClick={() => deleteUser(index)}
+      <ul>
+        {Users.map((user, index) => (
+          <li
+            key={index}
+            className="bg-red-100 flex items-center gap-12 w-fit p-4 mt-6 mx-auto"
           >
-            Delete
-          </button>
-        </div>
-      ))} */}
+            <div>
+              {index + 1}. {user.name} | {user.email}
+            </div>
+            <div>
+              <button
+                className="bg-yellow-500 py-1 px-3"
+                onClick={() => getUser(index)}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deletehandler(index)}
+                className="bg-red-500 py-1 px-3 text-white ms-3"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </>
   );
 };
