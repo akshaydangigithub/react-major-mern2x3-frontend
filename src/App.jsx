@@ -1,118 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "./components/Loader";
 
 const App = () => {
-  const [Users, setUsers] = useState([]);
-  const [userIndex, setUserIndex] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
+  const getposts = async () => {
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts?_limit=10&_start=${posts.length}`
+    );
 
-  const HandleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    data.length === 0 ? setHasMore(false) : "";
+
+    setPosts([...posts, ...data]);
   };
 
-  const SubmitHandler = (e) => {
-    e.preventDefault();
-
-    setUsers([...Users, formData]);
-
-    setFormData({
-      name: "",
-      email: "",
-    });
-  };
-
-  const deletehandler = (index) => {
-    const newUsers = Users.filter((user, i) => {
-      return i !== index;
-    });
-
-    setUsers(newUsers);
-  };
-
-  const getUser = (idx) => {
-    setUserIndex(idx);
-    setFormData(Users[idx]);
-  };
-
-  const UpdateHandler = (e) => {
-    e.preventDefault();
-
-    const copyUser = [...Users];
-
-    copyUser[userIndex] = formData;
-
-    setUsers(copyUser);
-
-    setUserIndex(null);
-
-    setFormData({
-      name: "",
-      email: "",
-    });
-  };
-
-  console.log(userIndex);
+  useEffect(() => {
+    getposts();
+  }, []);
 
   return (
-    <>
-      <h1 className="text-center font-bold text-3xl mt-10">User CRUD</h1>
-
-      <form className="mt-10">
-        <input
-          type="text"
-          name="name"
-          placeholder=" Enter your name"
-          value={formData.name}
-          onChange={HandleInputChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={HandleInputChange}
-        />
-
-        {userIndex === null ? (
-          <button onClick={SubmitHandler}>Submit</button>
-        ) : (
-          <button onClick={UpdateHandler}>Update</button>
-        )}
-      </form>
+    <div>
+      <h1 className="text-center text-3xl mb-6 font-bold mt-10">
+        React Infinite Scoll Component
+      </h1>
 
       <ul>
-        {Users.map((user, index) => (
-          <li
-            key={index}
-            className="bg-red-100 flex items-center gap-12 w-fit p-4 mt-6 mx-auto"
-          >
-            <div>
-              {index + 1}. {user.name} | {user.email}
-            </div>
-            <div>
-              <button
-                className="bg-yellow-500 py-1 px-3"
-                onClick={() => getUser(index)}
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => deletehandler(index)}
-                className="bg-red-500 py-1 px-3 text-white ms-3"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={getposts}
+          hasMore={hasMore}
+          loader={<Loader />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          {posts.map((post, index) => (
+            <li key={index} className="bg-gray-200 p-4 m-2">
+              <b>{post.id}. </b> {post.title}
+            </li>
+          ))}
+        </InfiniteScroll>
       </ul>
-    </>
+    </div>
   );
 };
 
