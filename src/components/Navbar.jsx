@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { RiHandbagLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import { LuCheckSquare } from "react-icons/lu";
+import { DataContext } from "../context/ContextApi";
 
 const Navbar = () => {
   const [showCart, setShowCart] = useState(false);
@@ -21,6 +22,16 @@ const Navbar = () => {
       setShowCart(false);
     }
   });
+
+  const { cartData, setCartData } = useContext(DataContext);
+
+  console.log(cartData);
+
+  const removeFromCart = (index) => {
+    const filterData = cartData.filter((d, i) => i !== index);
+
+    setCartData(filterData);
+  };
 
   return (
     <nav className="flex items-center justify-between py-4 px-20">
@@ -40,7 +51,7 @@ const Navbar = () => {
         >
           <RiHandbagLine className="text-xl" />
           <div className="h-5 w-5 text-white flex items-center justify-center bg-black absolute rounded-full -top-2 -right-2">
-            0
+            {cartData.length}
           </div>
         </div>
         <FaRegUser className="text-xl cursor-pointer" />
@@ -55,43 +66,35 @@ const Navbar = () => {
       >
         {/* Top */}
         <div className="bg-gray-100 p-5 w-full">Shopping Cart</div>
-        <div className="flex relative items-center gap-10 mt-5 px-5">
-          <img
-            height={70}
-            width={70}
-            src="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-1-500x570.jpg"
-            alt=""
-          />
-          <div>
-            <h1 className="font-semibold hover:text-red-600 transition-all duration-200 cursor-pointer">
-              Bottle - Wood Cork
-            </h1>
-            <p>1 x $170.00</p>
-          </div>
+        {cartData.length > 0 ? (
+          cartData.map((cart, index) => (
+            <div
+              key={index}
+              className="flex relative items-center gap-10 mt-5 px-5"
+            >
+              <img height={70} width={70} src={cart.img} alt="" />
+              <div>
+                <h1 className="font-semibold hover:text-red-600 transition-all duration-200 cursor-pointer">
+                  {cart.name}
+                </h1>
+                <p>
+                  {cart.quantity} x {cart.price}
+                </p>
+              </div>
 
-          <span className="absolute top-0 right-8 cursor-pointer">
-            <IoIosClose className="text-2xl" />
-          </span>
-        </div>
-        <hr className="mt-5" />
-        <div className="flex relative items-center gap-10 mt-5 px-5">
-          <img
-            height={70}
-            width={70}
-            src="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-6-500x570.jpg"
-            alt=""
-          />
-          <div>
-            <h1 className="font-semibold hover:text-red-600 transition-all duration-200 cursor-pointer">
-              Woolen - Coffee Mug
-            </h1>
-            <p>1 x $170.00</p>
+              <span
+                onClick={() => removeFromCart(index)}
+                className="absolute top-0 right-8 cursor-pointer"
+              >
+                <IoIosClose className="text-2xl" />
+              </span>
+            </div>
+          ))
+        ) : (
+          <div className="flex items-center justify-center h-[80%]">
+            <h1>Cart is empty</h1>
           </div>
-
-          <span className="absolute top-0 right-8 cursor-pointer">
-            <IoIosClose className="text-2xl" />
-          </span>
-        </div>
+        )}
 
         {/* Bottom */}
         <div className="absolute w-full bottom-0 left-0">

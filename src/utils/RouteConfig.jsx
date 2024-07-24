@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import Details from "../screens/Details";
 
 const Homepage = lazy(() => Wait().then(() => import("../screens/Homepage")));
 const About = lazy(() => Wait().then(() => import("../screens/About")));
@@ -16,6 +17,10 @@ const RouteConfig = [
   {
     path: "/contact",
     component: <Contact />,
+  },
+  {
+    path: "/details",
+    component: <Details />,
   },
 ];
 
