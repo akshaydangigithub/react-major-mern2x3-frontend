@@ -2,7 +2,7 @@ import React from "react";
 import { RiHandbagLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ img1, img2, name, price, category }) => {
+const Card = ({ img1, img2, img3, name, price, category }) => {
   const navigate = useNavigate();
   return (
     <div

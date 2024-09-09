@@ -11,15 +11,15 @@ const Details = () => {
   const [stateData, setStateData] = useState({});
   const [quantity, setQuantity] = useState(1);
 
-  const changeActiveTab = (tab) => {
-    setActiveTab(tab);
-  };
+  // const changeActiveTab = (tab) => {
+  //   setActiveTab(tab);
+  // };
 
-  const { state } = useLocation();
+  // const { state } = useLocation();
 
-  useEffect(() => {
-    setStateData(state);
-  }, [state]);
+  // useEffect(() => {
+  //   setStateData(state);
+  // }, [state]);
 
   const { cartData, setCartData } = useContext(DataContext);
 
@@ -44,26 +44,26 @@ const Details = () => {
         <div className="relative">
           <img
             className={`w-full h-[80%] scale-100 object-cover transition-all duration-200`}
-            src={image === 1 ? stateData.img1 : stateData.img2}
+            src=""
             alt=""
           />
           <div className="w-20 h-32 bg-red-400 absolute top-0 right-7">
             <img
-              onClick={() => setImage(1)}
+              // onClick={() => setImage(1)}
               className="cursor-pointer"
-              src={stateData.img1}
+              // src={stateData.img1}
               alt=""
             />
             <img
-              onClick={() => setImage(2)}
+              // onClick={() => setImage(2)}
               className="cursor-pointer"
-              src={stateData.img2}
+              // src={stateData.img2}
               alt=""
             />
           </div>
         </div>
         <div className="h-full w-full flex flex-col">
-          <h1 className="text-3xl font-bold">{stateData.name}</h1>
+          <h1 className="text-3xl font-bold"></h1>
           <div className="mt-4 flex items-center gap-1">
             <IoIosStarOutline className="text-xl" />
             <IoIosStarOutline className="text-xl" />
@@ -74,14 +74,14 @@ const Details = () => {
               (3 customer reviews)
             </p>
           </div>
-          <h2 className="text-2xl font-bold mt-5">{stateData.price}</h2>
+          <h2 className="text-2xl font-bold mt-5"></h2>
           <p className="mt-5 w-3/4">
             Microwave safe coffee mug with graffiti & art ceramic theme.Use in
             Microwave only for reheating purposes and these mugs will make
             Monday mornings easier to handle.
           </p>
           <p className="mt-5">
-            <b>Category:</b> {stateData.category}
+            <b>Category:</b>
           </p>
           <p className="mt-3">
             <b>SKU:</b> 603317-01

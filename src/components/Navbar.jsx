@@ -1,13 +1,17 @@
 import React, { useContext, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RiHandbagLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import { LuCheckSquare } from "react-icons/lu";
 import { DataContext } from "../context/ContextApi";
+import { AdminAuthContext } from "../context/AdminAuth";
 
 const Navbar = () => {
   const [showCart, setShowCart] = useState(false);
+  const navigate = useNavigate();
+
+  const { authAdmin } = useContext(AdminAuthContext);
 
   const sliderRef = useRef(null);
   const cartRef = useRef(null);
@@ -24,8 +28,6 @@ const Navbar = () => {
   });
 
   const { cartData, setCartData } = useContext(DataContext);
-
-  console.log(cartData);
 
   const removeFromCart = (index) => {
     const filterData = cartData.filter((d, i) => i !== index);
@@ -54,7 +56,21 @@ const Navbar = () => {
             {cartData.length}
           </div>
         </div>
-        <FaRegUser className="text-xl cursor-pointer" />
+        {authAdmin.isAuth ? (
+          <button
+            onClick={() => navigate("/admin/dashboard")}
+            className="bg-black text-white py-1 px-3 rounded-lg"
+          >
+            Dashboard
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-black text-white py-1 px-3 rounded-lg"
+          >
+            Login
+          </button>
+        )}
       </div>
 
       {/* slider of cart */}

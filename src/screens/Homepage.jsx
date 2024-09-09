@@ -1,14 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import Card from "../components/Card";
+import { RiHandbagLine } from "react-icons/ri";
 import Footer from "../components/Footer";
+import axios from "../utils/axios";
 
 const Homepage = () => {
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("/admin/product/read/all");
+      // console.log(res);
+
+      if (res.data.success) {
+        setProducts(res.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleNavigateToProduct = (product) => {
+    navigate(`/details/${product._id}`);
+  };
+
   return (
     <>
       <Navbar />
@@ -109,90 +135,42 @@ const Homepage = () => {
 
           {/* card */}
           <div className="grid grid-cols-4 py-10 gap-6">
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-5.jpg"
-              name="Wooden Container Bowl"
-              price="$190.00"
-              category="Essentials, Furniture"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-1.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2.jpg"
-              name="Bottle – Wood Cork"
-              price="$120.00"
-              category="Interior"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-7.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-4.jpg"
-              name="Sweeper"
-              price="$39.99"
-              category="Canvas Basket, Essentials"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-4.jpg"
-              name="Handcrafted Mug"
-              price="$119.10"
-              category="Furniture"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-5.jpg"
-              name="Wooden Container Bowl"
-              price="$190.00"
-              category="Essentials, Furniture"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-1.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2.jpg"
-              name="Bottle – Wood Cork"
-              price="$120.00"
-              category="Interior"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-7.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-4.jpg"
-              name="Sweeper"
-              price="$39.99"
-              category="Canvas Basket, Essentials"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-4.jpg"
-              name="Handcrafted Mug"
-              price="$119.10"
-              category="Furniture"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-5.jpg"
-              name="Wooden Container Bowl"
-              price="$190.00"
-              category="Essentials, Furniture"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-1.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2.jpg"
-              name="Bottle – Wood Cork"
-              price="$120.00"
-              category="Interior"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-1-7.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-2-4.jpg"
-              name="Sweeper"
-              price="$39.99"
-              category="Canvas Basket, Essentials"
-            />
-            <Card
-              img1="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-3.jpg"
-              img2="https://victorthemes.com/themes/seese/wp-content/uploads/2016/10/Image-4.jpg"
-              name="Handcrafted Mug"
-              price="$119.10"
-              category="Furniture"
-            />
+            {products.map((p, i) => (
+              <div
+                onClick={() => handleNavigateToProduct(p)}
+                key={i}
+                className="w-full overflow-hidden group h-[25rem] relative"
+              >
+                <img
+                  className="group-hover:invisible visible transition-all duration-200 cursor-pointer h-72 w-full object-cover"
+                  src={p?.images[0]?.url}
+                  alt=""
+                />
+                <img
+                  className="absolute top-0 group-hover:scale-100 scale-0 transition-all duration-200  cursor-pointer left-0 h-72 w-full object-cover"
+                  src={p?.images[1]?.url}
+                  alt=""
+                />
+
+                <div className="py-5">
+                  <div className="flex justify-between gap-10">
+                    <h1 className="leading-none font-semibold text-gray-700">
+                      {p?.name}
+                    </h1>
+                    <h1 className="leading-none">{p?.price}</h1>
+                  </div>
+                  <div className="mt-2">
+                    <h1 className="font-medium text-gray-500 scale-100 group-hover:hidden">
+                      {p?.category}
+                    </h1>
+                    <button className="scale-0 group-hover:scale-100 text-gray-500 flex items-center gap-3 border py-2 px-4 hover:bg-black hover:text-white transition-all duration-200">
+                      <RiHandbagLine className="text-2xl" />
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <hr className="mb-10" />
