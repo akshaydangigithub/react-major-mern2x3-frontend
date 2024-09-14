@@ -1,12 +1,12 @@
 import { lazy } from "react";
 import Details from "../screens/Details";
 import Dashboard from "../screens/admin/Dashboard";
-import Link1 from "../screens/admin/Link1";
 import AddProducts from "../screens/admin/products/AddProducts";
 import AllProducts from "../screens/admin/products/AllProducts";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import AdminLogin from "../screens/admin/AdminLogin";
+import UserDashboard from "../screens/user/UserDashboard";
 
 const Homepage = lazy(() => Wait().then(() => import("../screens/Homepage")));
 const About = lazy(() => Wait().then(() => import("../screens/About")));
@@ -29,7 +29,7 @@ const RouteConfig = [
     component: <Contact />,
   },
   {
-    path: "/details/:id",
+    path: "/details",
     component: <Details />,
   },
   {
@@ -56,10 +56,6 @@ const AdminRouteConfig = [
         component: <Dashboard />,
       },
       {
-        path: "link1",
-        component: <Link1 />,
-      },
-      {
         path: "product/add",
         component: <AddProducts />,
       },
@@ -71,8 +67,16 @@ const AdminRouteConfig = [
   },
 ];
 
+const UserRouteConfig = [
+  {
+    path: "/user/dashboard",
+    component: <UserDashboard />,
+  },
+];
+
 export default RouteConfig;
 export { AdminRouteConfig };
+export { UserRouteConfig };
 
 const Wait = () => {
   return new Promise((resolve) => {

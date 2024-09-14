@@ -15,10 +15,6 @@ const Sidebar = () => {
       path: "/admin/dashboard",
     },
     {
-      name: "Link1",
-      path: "/admin/link1",
-    },
-    {
       name: "Products",
       path: "#",
       isDropdown: true,

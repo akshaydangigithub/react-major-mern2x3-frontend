@@ -2,12 +2,17 @@ import React, { Suspense, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import Loader from "./components/Loader";
 
-import RouteConfig, { AdminRouteConfig } from "./utils/RouteConfig";
+import RouteConfig, {
+  AdminRouteConfig,
+  UserRouteConfig,
+} from "./utils/RouteConfig";
 import { AdminAuthContext } from "./context/AdminAuth";
 import AdminNotFound from "./screens/admin/AdminNotFound";
+import { DataAuthContext } from "./context/UserAuth";
 
 const App = () => {
   const { authAdmin } = useContext(AdminAuthContext);
+  const { authUser } = useContext(DataAuthContext);
 
   return (
     <Routes>
@@ -38,6 +43,20 @@ const App = () => {
               />
             ))}
           </Route>
+        ))
+      ) : (
+        <Route path="*" element={<AdminNotFound />} />
+      )}
+
+      {authUser.isAuth ? (
+        UserRouteConfig.map((route, index) => (
+          <Route
+            path={route.path}
+            key={index}
+            element={
+              <Suspense fallback={<Loader />}>{route.component}</Suspense>
+            }
+          />
         ))
       ) : (
         <Route path="*" element={<AdminNotFound />} />
