@@ -5,12 +5,12 @@ import "./index.css";
 import ContextApi from "./context/ContextApi.jsx";
 import { Toaster } from "react-hot-toast";
 import AdminAuth from "./context/AdminAuth.jsx";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import UserAuth from "./context/UserAuth.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <ContextApi>
         <AdminAuth>
           <UserAuth>
@@ -19,6 +19,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           </UserAuth>
         </AdminAuth>
       </ContextApi>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
